@@ -1,4 +1,4 @@
-import streamlit as streamlit
+import streamlit as st
 from utils import extract_features, predict_accent, load_model
 import tempfile
 import os
@@ -11,5 +11,14 @@ model = load_model()
 if uploaded_file is not None:
     with tempfile.NamedTemporaryFile(delete=False, suffix = ".wav") as temp_file:
         temp_file.write(uploaded_file.read())
-        file_path = temp_file
+        file_path = temp_file.name
+        st.audio(uploaded_file, format='audio/wav')
+        if st.button("predict Accent"):
+            try:
+                prediction = predict_accent(file_path, model)
+                st.success(f"🗣️Predicted Accent: **{prediction}**")
+            except Exception as e:
+                st.error(f"Error: {e}")
+
+
 
